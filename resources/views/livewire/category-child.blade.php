@@ -3,15 +3,24 @@
         @foreach($children as $child)
             <li class="cursor-pointer list-group-item m-2">
                 {{ $child->title }}
-                <button type="button" wire:click="$emit('addChildCategory', {{ $child->id }})" class="btn btn-primary btn-sm">
+                <button type="button"
+                    wire:click="$emit('addChildCategory', {{ $child->id }})"
+                    class="btn btn-primary btn-sm"
+                >
                     <i class="fa fa-plus"></i>
                 </button>
 
-                <button wire:click="$emit('editCategory', {{ $child->id }})" class="btn btn-warning btn-sm">
+                <button type="button"
+                    wire:click="$emit('editCategory', {{ $child->id }})"
+                    class="btn btn-warning btn-sm"
+                >
                     <i class="fa fa-edit"></i>
                 </button>
 
-                <button type="button" wire:click="$emit('deleteCategory', {{ $child->id }})" class="btn btn-danger btn-sm">
+                <button type="button"
+                    wire:click="$emit('deleteCategory', {{ $child->id }})"
+                    class="btn btn-danger btn-sm"
+                >
                     <i class="fa fa-trash"></i>
                 </button>
 
