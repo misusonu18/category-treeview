@@ -30,6 +30,7 @@ class Category extends Component
         $getDetails = ModelsCategory::whereId($id)->first();
         $this->categoryId = $id;
         $this->title = $getDetails->title;
+        $this->createCategory = false;
         $this->editCategory = true;
     }
 
@@ -47,11 +48,12 @@ class Category extends Component
     public function deleteCategory($id)
     {
         ModelsCategory::whereId($id)->delete();
-        $this->emit('Refresh');
+        $this->mount();
     }
 
-    public function addCategory($id)
+    public function addCategory()
     {
+        $this->editCategory = false;
         $this->createCategory = true;
         $this->validate();
         ModelsCategory::create([
@@ -60,11 +62,12 @@ class Category extends Component
         ]);
         $this->title = '';
         $this->createCategory = false;
-        $this->emit('Refresh');
+        $this->mount();
     }
 
     public function addChildCategory($id)
     {
+        $this->editCategory = false;
         $this->createCategory = true;
         $this->categoryId = $id;
         $this->validate();
