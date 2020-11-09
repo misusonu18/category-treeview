@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class CategoryChild extends Component
 {
-    protected $listeners = ['Refresh' => '$refresh',];
+    protected $listeners = ['RefreshChild' => '$refresh'];
     public $children;
 
     public function render()
