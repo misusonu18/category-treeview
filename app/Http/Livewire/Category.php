@@ -8,10 +8,12 @@ use Livewire\Component;
 class Category extends Component
 {
     public $categories;
+    public $categorySelect;
     public $editCategory = false;
     public $createCategory = false;
     public $title;
     public $categoryId;
+    public $categorySelection;
 
     protected $rules = [
         'title' => 'required|unique:categories',
@@ -22,6 +24,9 @@ class Category extends Component
         'deleteCategory',
         'addCategory',
         'addChildCategory',
+        'getChildCategory',
+        'getChildId' => 'getChildId',
+        'CategorySelection' => 'CategorySelection',
         'Refresh' => '$refresh',
     ];
 
@@ -36,19 +41,26 @@ class Category extends Component
 
     public function updateCategory()
     {
+        $this->validate();
         ModelsCategory::whereId($this->categoryId)->first()->update([
             'title' => $this->title,
         ]);
         $this->categoryId = '';
         $this->title = '';
         $this->editCategory = false;
-        $this->emit('Refresh');
+        $this->refreshComponent();
     }
 
     public function deleteCategory($id)
     {
-        ModelsCategory::whereId($id)->delete();
-        $this->mount();
+        $hasParentCategory = ModelsCategory::where('parent_id', $id)->exists();
+        $categoryName = ModelsCategory::whereId($id)->first();
+        if (!$hasParentCategory) {
+            ModelsCategory::whereId($id)->delete();
+            $this->refreshComponent();
+        } else {
+            session()->flash('message', 'There are child category for this '. $categoryName->title .' category. Cannot be deleted.');
+        }
     }
 
     public function addCategory()
@@ -62,28 +74,52 @@ class Category extends Component
         ]);
         $this->title = '';
         $this->createCategory = false;
-        $this->mount();
+        $this->refreshComponent();
     }
 
-    public function addChildCategory($id)
+    public function getChildCategory($id)
     {
         $this->editCategory = false;
         $this->createCategory = true;
         $this->categoryId = $id;
+        $this->refreshComponent();
+    }
+
+    public function addChildCategory($id)
+    {
         $this->validate();
         ModelsCategory::create([
             'title' => $this->title,
-            'parent_id' => $this->categoryId
+            'parent_id' => $id
         ]);
         $this->categoryId = '';
         $this->title = '';
         $this->createCategory = false;
+        $this->refreshComponent();
+    }
+
+    public function refreshComponent()
+    {
+        $this->mount();
         $this->emit('Refresh');
+        $this->emit('RefreshChild');
+    }
+
+    public function CategorySelection($id)
+    {
+        $categories = ModelsCategory::where('parent_id', $id)->get();
+        $this->dispatchBrowserEvent('child-category', ['newChild' => $categories]);
+    }
+
+    public function getChildId($id, $parentId)
+    {
+        ModelsCategory::whereId($id)->first()->update(['parent_id' => $parentId]);
     }
 
     public function mount()
     {
         $this->categories = ModelsCategory::where('parent_id', '=', 0)->get();
+        $this->categorySelect = ModelsCategory::get(['id as value', 'title as label']);
     }
 
     public function render()
