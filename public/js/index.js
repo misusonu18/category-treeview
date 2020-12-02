@@ -27,21 +27,26 @@ for (var i = 0; i < sortTree.length; i++) {
 var idOfSelectedBox = '';
 var lastSelectedBoxValue = '';
 var selectedBoxData = [];
+var selectedBoxDataId = [];
 var mainSelectedBoxData = [];
 
 function myCategory(idName) {
     var categorySelect = document.getElementById('category');
+    var selectedId = document.getElementById(idName);
+
     for (let i = 1; i < categorySelect.length; i++) {
         mainSelectedBoxData.push(categorySelect[i].value);
     }
     if (document.getElementById(idName).value != '0') {
         for (let i = 0; i < mainSelectedBoxData.length; i++) {
-            if (mainSelectedBoxData[i] == document.getElementById(idName).value) {
+            if (mainSelectedBoxData[i] == selectedId.value) {
+                selectedBoxDataId = [];
                 selectedBoxData = [];
             }
         }
-        selectedBoxData.push(document.getElementById(idName).value);
-        Livewire.emit('CategorySelection', document.getElementById(idName).value);
+        selectedBoxData.push(selectedId.options[selectedId.selectedIndex].text);
+        selectedBoxDataId.push(selectedId.value);
+        Livewire.emit('CategorySelection', selectedId.value);
     }
 }
 
