@@ -1,10 +1,14 @@
 <div>
-    <ul class="list-group list-group-flush">
+    <ul id="tree1" class="list-group list-group-flush">
         @foreach($children as $child)
-            <li class="cursor-pointer list-group-item m-2">
+            <li class="list-group-item"
+                id="nestedChild-{{ $child->id }}"
+                data-parentId="{{ $child->parent_id }}"
+                data-id="{{ $child->id }}"
+            >
                 {{ $child->title }}
                 <button type="button"
-                    wire:click="$emit('addChildCategory', {{ $child->id }})"
+                    wire:click="$emit('getChildCategory', {{ $child->id }})"
                     class="btn btn-primary btn-sm"
                 >
                     <i class="fa fa-plus"></i>
@@ -19,13 +23,16 @@
 
                 <button type="button"
                     wire:click="$emit('deleteCategory', {{ $child->id }})"
+                    onclick="
+                        confirm('Are you sure you want to delete this category and all of its subcategories?') || event.stopImmediatePropagation()
+                    "
                     class="btn btn-danger btn-sm"
                 >
                     <i class="fa fa-trash"></i>
                 </button>
 
                 @if(count($child->child))
-                    @livewire('category-child', ['children' => $child->child], key($child->id))
+                    <livewire:category-child :children="$child->child" :key="$child->id">
                 @endif
             </li>
         @endforeach
