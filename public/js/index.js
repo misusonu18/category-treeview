@@ -24,11 +24,11 @@ for (var i = 0; i < sortTree.length; i++) {
     });
 }
 
-var idOfSelectedBox = '';
-var lastSelectedBoxValue = '';
 var selectedBoxData = [];
 var selectedBoxDataId = [];
 var mainSelectedBoxData = [];
+var idOfSelectedBox = '';
+var lastSelectedBoxValue = '';
 
 function myCategory(idName) {
     var categorySelect = document.getElementById('category');

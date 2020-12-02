@@ -1,6 +1,6 @@
 <div>
     <div class="row justify-content-center">
-        <h1>Tree View</h1>
+        <h1>Drop-Down Tree View</h1>
     </div>
 
     <hr class="bg-success">

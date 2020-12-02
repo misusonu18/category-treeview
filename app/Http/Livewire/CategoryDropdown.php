@@ -10,7 +10,7 @@ class CategoryDropdown extends Component
     public $categories;
 
     protected $listeners = [
-        'CategorySelection' => 'CategorySelection',
+        'CategorySelection',
     ];
 
     public function CategorySelection($id)
