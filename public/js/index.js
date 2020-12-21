@@ -24,52 +24,31 @@ for (var i = 0; i < sortTree.length; i++) {
     });
 }
 
-var selectedBoxData = [];
-var selectedBoxDataId = [];
-var mainSelectedBoxData = [];
-var idOfSelectedBox = '';
-var lastSelectedBoxValue = '';
-
-function myCategory(idName) {
-    var categorySelect = document.getElementById('category');
+function getChildCategory(idName) {
     var selectedId = document.getElementById(idName);
-
-    for (let i = 1; i < categorySelect.length; i++) {
-        mainSelectedBoxData.push(categorySelect[i].value);
-    }
-    if (document.getElementById(idName).value != '0') {
-        for (let i = 0; i < mainSelectedBoxData.length; i++) {
-            if (mainSelectedBoxData[i] == selectedId.value) {
-                selectedBoxDataId = [];
-                selectedBoxData = [];
-            }
-        }
-        selectedBoxData.push(selectedId.options[selectedId.selectedIndex].text);
-        selectedBoxDataId.push(selectedId.value);
-        Livewire.emit('CategorySelection', selectedId.value);
-    }
+    document.getElementById('divChildCategory').remove();
+    Livewire.emit('fetchChildCategories', selectedId.value);
 }
 
-window.addEventListener('child-category', childCategory, true);
+window.addEventListener('create-child-category', createChildCategory, true);
 
-function childCategory(event) {
-    var child = event.detail.newChild;
-    if (child != '') {
+function createChildCategory(event) {
+    let child = event.detail.newChild;
+
+    child.forEach(data => {
         var createSelectList = document.createElement('select');
-        idOfSelectedBox = 'childCategory' + child[0].id;
-        createSelectList.setAttribute('id', 'childCategory' + child[0].id);
-        createSelectList.setAttribute('name', 'childCategory' + child[0].id);
-        createSelectList.setAttribute('onchange', 'myCategory("childCategory' + child[0].id + '")');
+        createSelectList.setAttribute('id', 'childCategory' + data.id);
+        createSelectList.setAttribute('onchange', 'getChildCategory("childCategory' + data.id + '")');
         createSelectList.setAttribute('class', 'custom-select');
-        document.getElementById('categorySelection').appendChild(createSelectList);
+        document.getElementById('divChildCategory').appendChild(createSelectList)
+
         var createOptionAsPlaceHolder = document.createElement("option");
         createOptionAsPlaceHolder.appendChild(document.createTextNode('Enter Category'));
-        document.getElementById("childCategory" + child[0].id + "").appendChild(createOptionAsPlaceHolder);
-        for (var i = 0; i < child.length; i++) {
-            var createOption = document.createElement("option");
-            createOption.appendChild(document.createTextNode(child[i].title))
-            createOption.setAttribute('value', child[i].id);
-            document.getElementById("childCategory" + child[0].id + "").append(createOption);
-        }
-    }
-};
+        document.getElementById("childCategory" + data.id + "").appendChild(createOptionAsPlaceHolder);
+
+        var createOption = document.createElement("option");
+        createOption.appendChild(document.createTextNode(data.title))
+        createOption.setAttribute('value', data.id);
+        document.getElementById("childCategory" + data.id + "").appendChild(createOption);
+    });
+}

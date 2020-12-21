@@ -8,15 +8,16 @@ use Livewire\Component;
 class CategoryDropdown extends Component
 {
     public $categories;
+    public $parentCategory;
 
     protected $listeners = [
-        'CategorySelection',
+        'fetchChildCategories',
     ];
 
-    public function CategorySelection($id)
+    public function fetchChildCategories($categoryId)
     {
-        $categories = Category::where('parent_id', $id)->get();
-        $this->dispatchBrowserEvent('child-category', ['newChild' => $categories]);
+        $categories = Category::where('parent_id', $categoryId)->get();
+        $this->dispatchBrowserEvent('create-child-category', ['newChild' => $categories]);
     }
 
     public function mount()
