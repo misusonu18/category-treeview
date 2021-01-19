@@ -8,7 +8,7 @@ class Category extends Model
 {
     public $fillable = ['title','parent_id'];
 
-    public function child()
+    public function children()
     {
         return $this->hasMany('App\Models\Category', 'parent_id', 'id') ;
     }
