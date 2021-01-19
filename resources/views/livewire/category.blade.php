@@ -60,8 +60,8 @@
                             <i class="fa fa-trash"></i>
                         </button>
 
-                        @if(count($category->child))
-                            <livewire:category-child :children="$category->child" :key="$category->id">
+                        @if(count($category->children))
+                            <livewire:category-child :children="$category->children" :key="$category->id">
                         @endif
                     </li>
                 @endforeach

@@ -31,8 +31,8 @@
                     <i class="fa fa-trash"></i>
                 </button>
 
-                @if(count($child->child))
-                    <livewire:category-child :children="$child->child" :key="$child->id">
+                @if(count($child->children))
+                    <livewire:category-child :children="$child->children" :key="$child->id">
                 @endif
             </li>
         @endforeach
