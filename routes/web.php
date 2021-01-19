@@ -6,4 +6,4 @@ use App\Http\Livewire\NestedComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/category', CategoryDropdown::class);
-Route::get('/view', Category::class);
+Route::get('/', Category::class);
